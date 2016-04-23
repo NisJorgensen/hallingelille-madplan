@@ -1,0 +1,33 @@
+<h2>{{title}}</h2>
+<table border=1>
+<tr>
+<th>Adresse</th>
+<th>Navn</th>
+<th>Madvaner</th>
+<th>Minus Kød</th>
+<th>Minus Fisk</th>
+<th>Minus Gluten</th>
+<th>Minus Mælk</th>
+
+{% regroup qs by familie as familieliste %}
+{% for familie in familieliste %}
+{% regroup familie.list by madpraeferencer.fritekst as madvaneliste %}
+{% for madvane in madvaneliste%}
+{% for person in madvane.list %}
+<tr>
+{%if forloop.first and forloop.parentloop.first%} 
+<td style="whitespace: nowrap" rowspan="{{familie.list|length}}">{{familie.grouper.husstand}}</td>
+{%endif%}
+<td>{{person.navn}}</td>
+{% if forloop.first %}
+<td rowspan="{{madvane.list|length}}">{{madvane.grouper}}</td>
+<td rowspan="{{madvane.list|length}}">{{person.madpraeferencer.minus_koed|yesno:"X,"}}</td>
+<td rowspan="{{madvane.list|length}}">{{person.madpraeferencer.minus_fisk|yesno:"X,"}}</td>
+<td rowspan="{{madvane.list|length}}">{{person.madpraeferencer.minus_gluten|yesno:"X,"}}</td>
+<td rowspan="{{madvane.list|length}}">{{person.madpraeferencer.minus_maelk|yesno:"X,"}}</td>
+{%endif%}
+</tr>
+{% endfor %}
+{% endfor %}
+{% endfor %}
+</table>

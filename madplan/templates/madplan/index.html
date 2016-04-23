@@ -1,0 +1,7 @@
+<h1>Velkommen, {{person.navn}}, til Hallingelilles Madplan</h1>
+<p>Du har følgende muligheder</p>
+<ul>
+{% for punkt in menupunkter %}
+	<li><a href="{{punkt.url}}"> {{punkt.text}} </a></li>
+{% endfor %}
+</ul>

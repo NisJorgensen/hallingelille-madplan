@@ -1,0 +1,35 @@
+<h1>Afregning for perioden {{startdato}} - {{slutdato}}</h1>
+<p>Begræns/Ret periode:</p>
+<form method="get" action="afregning_udlaeg">
+{{periodeform.as_p}}
+<input type="submit" value="Opdater" />
+</form>
+
+<form method="post" action="afregning_udlaeg">
+{% csrf_token %}
+
+{{afregnetform.as_p}}
+<input type="submit" value="Marker som afregnet" />
+</form>
+
+<table>
+<tr>
+<th>Husstand</th>
+<th>Familie</th>
+<th>Person</th>
+<th>Dato</th>
+<th>Udlaeg</th>
+<th>Samlet Budget</th>
+</tr>
+
+{% for udlaeg in queryset %}
+<tr>
+<td>{{udlaeg.person.familie.husstand}}</td>
+<td>{{udlaeg.person.familie.medlemsliste}}</td>
+<td>{{udlaeg.person.navn}}</td>
+<td>{{udlaeg.maddag.dato|date:"Y-m-d"}}</td>
+<td>{{udlaeg.beloeb}}</td>
+<td>{{udlaeg.maddag.budget}}</td>
+</tr>
+{% endfor %}
+</table>

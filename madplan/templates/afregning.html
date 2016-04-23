@@ -1,0 +1,49 @@
+{% load l10n %}
+
+<h1>Afregning for perioden {{startdato}} - {{slutdato}}</h1>
+<p>Begræns/Ret periode:</p>
+<form method="get" action="afregning">
+{{periodeform.as_p}}
+<input type="submit" value="Opdater" />
+</form>
+
+<form method="post" action="afregning">
+{% csrf_token %}
+
+{{afregnetform.as_p}}
+<input type="submit" value="Marker som afregnet" />
+</form>
+
+<table>
+<tr>
+<th>Husstand</th>
+<th>Familie</th>
+<th>Person</th>
+<th>Dato</th>
+<th>Pris</th>
+<th>Note</th>
+</tr>
+
+{% for tilmelding in queryset %}
+{% if tilmelding.pris_aktuel > 0 %}
+<tr>
+<td>{{tilmelding.person.familie.husstand}}</td>
+<td>{{tilmelding.person.familie.medlemsliste}}</td>
+<td>{{tilmelding.person.navn}}</td>
+<td>{{tilmelding.maddag.dato|date:"Y-m-d"}}</td>
+<td>{{tilmelding.pris_aktuel|localize}}</td>
+<td>
+
+{% if tilmelding.gaester_voksne > 0 %}
+{{tilmelding.gaester_voksne}} voksne gæster
+{% endif %}
+{% if tilmelding.gaester_boern > 0 %}
+{{tilmelding.gaester_boern}} små gæster
+{% endif %}
+</td>
+</tr>
+{% endif %}
+{% empty %}
+<tr><td>No articles yet.</td></tr>
+{% endfor %}
+</table>
